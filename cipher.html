@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <title>cipher</title>
+</head>
+
+<body>
+    <form id="form" method="get">
+        <p>
+            <label for="key">Key:</label>
+            <input type="text" id="key" name="key" value="{{.Key}}" />
+        </p>
+        <p>
+            <label for="text">Text:</label>
+            <input type="text" id="text" name="text" value="{{.Text}}" />
+        </p>
+        <p class="button">
+            <button type="submit" formaction="/encrypt">encrypt</button>
+        </p>
+        <p class="button">
+            <button type="submit" formaction="/decrypt">decrypt</button>
+        </p>
+    </form>
+    <output form="form">{{.Result}}</output>
+</body>
+
+</html>
