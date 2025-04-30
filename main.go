@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"html/template"
 	"io"
 	"log"
@@ -31,9 +33,9 @@ func main() {
 }
 
 type Cipher struct {
-	Key    string
-	Text   string
-	Result string
+	Key    string `json:"key"`
+	Text   string `json:"text"`
+	Result string `json:"result"`
 }
 
 func encrypt(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +72,8 @@ func encrypt(w http.ResponseWriter, r *http.Request) {
 		Text:   string(plaintext),
 		Result: hex.EncodeToString(ciphertext),
 	}
-	runTemplate(w, data)
+
+	writeJSONResponse(w, data, http.StatusOK)
 }
 
 func decrypt(w http.ResponseWriter, r *http.Request) {
@@ -112,12 +115,26 @@ func decrypt(w http.ResponseWriter, r *http.Request) {
 		Text:   text,
 		Result: string(ciphertext),
 	}
-	runTemplate(w, data)
+
+	writeJSONResponse(w, data, http.StatusOK)
 }
 
 func runTemplate(w http.ResponseWriter, data interface{}) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := templ.Execute(w, data); err != nil {
 		log.Printf("templ.Execute(w, %+v): %v", data, err)
+	}
+}
+
+func writeJSONResponse(w http.ResponseWriter, resp any, status int) {
+	w.Header().Set("Content-Type", "application/json")
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(resp); err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(status)
+	if _, err := io.Copy(w, &buf); err != nil {
+		log.Printf("io.Copy(w, &buf): %v", err)
 	}
 }
