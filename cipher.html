@@ -6,11 +6,11 @@
 
 <body>
     <form id="form" method="get">
-            <label for="key">Key:</label>
-            <input type="text" id="key" name="key" value="{{.Key}}" />
+        <label for="key">Key:</label>
+        <input type="text" id="key" name="key" value="{{.Key}}" />
 
-            <label for="text">Text:</label>
-            <input type="text" id="text" name="text" value="{{.Text}}" />
+        <label for="text">Text:</label>
+        <input type="text" id="text" name="text" value="{{.Text}}" />
 
         <button id="encrypt" type="submit" formaction="/encrypt">encrypt</button>
 
@@ -18,5 +18,36 @@
     </form>
     <output form="form">{{.Result}}</output>
 </body>
+
+<script>
+    const output = document.querySelector("output");
+
+    async function onSubmit(event) {
+        event.preventDefault();
+        const url = event.target.formAction;
+
+        const data = new FormData(document.querySelector("form"));
+        const opts = { method: "POST", body: data };
+
+        try {
+            const res = await fetch(url, opts);
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+
+            const cipher = await res.json();
+            output.textContent = cipher.result;
+        } catch (err) {
+            output.textContent = `error: ${err}`;
+        }
+    }
+
+    const encBtn = document.querySelector("#encrypt");
+    encBtn.addEventListener("click", onSubmit);
+
+    const decBtn = document.querySelector("#decrypt");
+    decBtn.addEventListener("click", onSubmit)
+</script>
 
 </html>
