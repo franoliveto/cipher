@@ -1,1 +1,1 @@
-cipher is a toy web tool for AES encryption and decryption.
+crypto is a toy web tool for AES encryption and decryption.
