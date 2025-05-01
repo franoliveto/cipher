@@ -2,46 +2,68 @@
 
 <head>
     <title>crypto</title>
+    <style>
+        .form-control {
+            margin-top: 1rem;
+        }
+
+        .form-control input,
+        .form-control textarea {
+            width: 100%;
+        }
+
+        div {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
     <h2>Encryption</h2>
-    <form id="encryption" action="/encrypt" method="post">
-        <div>
-            <label for="text">Text</label>
-            <textarea type="text" id="text" name="text" rows="5"></textarea>
+    <div style="justify-content: space-between; display: flex;">
+        <div style="width: 49%;">
+            <form id="encryption" action="/encrypt" method="post">
+                <div class="form-control">
+                    <label for="text">Text</label>
+                    <textarea type="text" id="text" name="text" rows="5"></textarea>
+                </div>
+                <div class="form-control">
+                    <label for="key">Key</label>
+                    <input type="text" id="key" name="key" value />
+                </div>
+                <div class="form-control">
+                    <label for="key_size">Key Size</label>
+                    <select name="key_size" id="key_size">
+                        <option value="128">128 Bits</option>
+                        <option value="192">192 Bits</option>
+                        <option value="256">256 Bits</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="mode">Encryption Mode</label>
+                    <select name="mode" id="mode">
+                        <option value="cbc">CBC</option>
+                        <option value="ecb">ECB</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="format">Output Format</label>
+                    <select name="format" id="format">
+                        <option value="base64">Base64</option>
+                        <option value="hex">Hex</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <button type="submit">encrypt</button>
+                </div>
+            </form>
         </div>
-        <div>
-            <label for="key">Key</label>
-            <input type="text" id="key" name="key" value />
+        <div style="width: 49%;">
+            <div class="form-control">
+                <label for="encrypted_text">Encrypted Text</label>
+                <textarea type="text" id="encrypted_text" name="encrypted_text" rows="20"></textarea>
+            </div>
         </div>
-        <div>
-            <label for="key_size">Key Size</label>
-            <select name="key_size" id="key_size">
-                <option value="128">128 Bits</option>
-                <option value="192">192 Bits</option>
-                <option value="256">256 Bits</option>
-            </select>
-        </div>
-        <div>
-            <label for="mode">Encryption Mode</label>
-            <select name="mode" id="mode">
-                <option value="cbc">CBC</option>
-                <option value="ecb">ECB</option>
-            </select>
-        </div>
-        <div>
-            <label for="format">Output Format</label>
-            <select name="format" id="format">
-                <option value="base64">Base64</option>
-                <option value="hex">Hex</option>
-            </select>
-        </div>
-        <button type="submit">encrypt</button>
-    </form>
-    <div>
-        <label for="encrypted_text">Encrypted Text</label>
-        <textarea type="text" id="encrypted_text" name="encrypted_text" rows="20"></textarea>
     </div>
     <script>
         const form = document.getElementById("encryption")
@@ -64,7 +86,6 @@
             });
         });
     </script>
-
 </body>
 
 </html>
